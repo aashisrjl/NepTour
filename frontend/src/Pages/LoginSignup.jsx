@@ -1,182 +1,87 @@
-//Latest
-import { useState } from "react";
-const LoginSignup = () => {
-   const [state, setState] = useState("LogIn");
-   const [formData, setFormData] = useState({
-      username: "",
-      password: "",
-      email: "",
-      image: null,
-   });
+import React, { useState } from "react";
+import { IoMdClose } from "react-icons/io";
+import InputBox from "../Components/InputBox";
+import { IoMail } from "react-icons/io5";
+import Button from "../Components/Button";
+import { FaLock, FaUser } from "react-icons/fa";
 
-   const changeHandler = (e) => {
-      const { name, value, files } = e.target;
-      if (name === "image") {
-         setFormData({ ...formData, [name]: files[0] });
-      } else {
-         setFormData({ ...formData, [name]: value });
-      }
-   };
-
-   const login = async () => {
-      console.log("LogIn Function Executed", formData);
-
-      const { password, email } = formData;
-      const loginData = { password, email };
-
-      try {
-         const response = await fetch(
-            "https://fb41-202-51-68-213.ngrok-free.app/login",
-            {
-               method: "POST",
-               headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-               },
-               body: JSON.stringify(loginData),
-            }
-         );
-
-         const responseData = await response.json();
-         console.log("Login Response:", responseData);
-
-         if (responseData) {
-            localStorage.setItem("auth-token", responseData.token);
-            window.location.replace("/");
-         } else {
-            alert(responseData.errors || "Login failed");
-         }
-      } catch (error) {
-         console.error("Login Error:", error);
-         alert("An error occurred during login. Please try again.");
-      }
-   };
-
-   const signup = async () => {
-      console.log("SignUp Function Executed", formData);
-
-      const formDataToSend = new FormData();
-      formDataToSend.append("username", formData.username);
-      formDataToSend.append("password", formData.password);
-      formDataToSend.append("email", formData.email);
-      formDataToSend.append("image", formData.image);
-
-      try {
-         const response = await fetch(
-            "https://fb41-202-51-68-213.ngrok-free.app/register",
-            {
-               method: "POST",
-               body: formDataToSend,
-            }
-         );
-
-         const responseData = await response.json();
-         console.log("SignUp Response Data:", responseData);
-
-         if (responseData) {
-            localStorage.setItem("auth-token", responseData.token);
-            window.location.replace("/loginsign");
-         } else {
-            console.error(
-               "SignUp Failed - Error Message:",
-               responseData.errors
-            );
-            alert(responseData.errors || "Signup failed");
-         }
-      } catch (error) {
-         console.error("Signup Error:", error);
-         alert("An error occurred during signup. Please try again.");
-      }
-   };
+function LoginSignup({showModal,onClose}) {
+  if (!showModal) return null;
+   const [state, setState] = useState("Login");
 
    return (
-      <div className="w-full h-auto pt-14 pb-8 mb-[25vw]">
-         <div className="w-11/12 max-w-lg h-auto bg-white mx-auto p-5">
-            <h1 className="my-5 text-2xl">{state}</h1>
-            <div className="flex flex-col gap-5 mt-5">
-               {state === "SignUp" && (
-                  <input
-                     name="username"
-                     value={formData.username}
-                     onChange={changeHandler}
-                     type="text"
-                     placeholder="Your Name"
-                     className="h-14 px-4 text-base  border-b-2 border-black focus:border-orange-500 outline-none p-2"
-                  />
-               )}
-               <input
-                  name="email"
-                  value={formData.email}
-                  onChange={changeHandler}
-                  type="email"
-                  placeholder="Email Address"
-                  className="h-14 px-4 text-base  border-b-2 border-black focus:border-orange-500 outline-none p-2"
-               />
-               <input
-                  name="password"
-                  value={formData.password}
-                  onChange={changeHandler}
-                  type="password"
-                  placeholder="Password"
-                  className="h-14 px-4 text-base  border-b-2 border-black focus:border-orange-500 outline-none p-2"
-               />
-               {state === "SignUp" && (
-                  <label className="bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded cursor-pointer">
-                     Choose a file
-                     <input
-                        name="image"
-                        onChange={changeHandler}
-                        type="file"
-                        accept="image/*"
-                        className=" hidden"
+      <>
+         <div className="fixed inset-0 w-screen  bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-1/3 flex flex-col bg-white">
+               <IoMdClose onClick={onClose} className="place-self-end text-3xl font-bold m-2 hover:drop-shadow-lg hover:cursor-pointer text-primarycolor" />
+               <div className="">
+                  <h1 className="font-semibold text-black text-4xl text-center">
+                     {state === "Login" ? (
+                        <>
+                           Log<span className="text-primarycolor">in</span>
+                        </>
+                     ) : (
+                        <>
+                           Sign<span className="text-primarycolor">Up</span>
+                        </>
+                     )}
+                  </h1>
+
+                  <div className="mt-8">
+                     <InputBox
+                        placeholder="Enter your username"
+                        Icon={FaUser}
                      />
-                  </label>
-               )}
-            </div>
-            <button
-               onClick={() => {
-                  state === "LogIn" ? login() : signup();
-               }}
-               className="w-full h-14 text-white bg-orange-600 rounded-sm mt-5 border-none text-lg font-medium cursor-pointer  hover:bg-orange-500 "
-            >
-               Continue
-            </button>
-            <div className="flex items-center mt-4 gap-2 text-gray-600 text-base font-medium">
-               <input type="checkbox" />
-               <p>
-                  By Continuing, I agree to the terms of use & privacy policy.
-               </p>
-            </div>
-            {state === "Sign Up" ? (
-               <p className="mt-4 text-gray-600 text-base font-medium">
-                  Already have an account?
-                  <span
+                     <InputBox placeholder="Enter your email" Icon={IoMail} />
+                     <InputBox
+                        type="password"
+                        placeholder={
+                           state === "Login" ? "Password" : "Set password"
+                        }
+                        Icon={FaLock}
+                     />
+                     {state === "Signup" && (
+                        <>
+                           <InputBox
+                              type="password"
+                              placeholder="Confirm password"
+                              Icon={FaLock}
+                           />
+                        </>
+                     )}
+                  </div>
+                  {state === "Login" && (
+                     <p className="text-center text-black">
+                        Forgot password?{" "}
+                        <a href="#" className="text-primarycolor">
+                           Click Here
+                        </a>
+                     </p>
+                  )}
+               </div>
+               <div className="flex justify-evenly py-4">
+                  <Button className="py-2 px-11 rounded-3xl">
+                     {state === "Login" ? "Login" : "Signup"}
+                  </Button>
+                  <Button
                      onClick={() => {
-                        setState("LogIn");
+                        if (state === "Login") {
+                           setState("Signup");
+                        } else {
+                           setState("Login");
+                        }
                      }}
-                     className="text-orange-600 font-semibold cursor-pointer"
+                     className="py-2 px-9 rounded-3xl font-semibold "
+                     bg="bg-gray-300"
+                     txt="text-black"
                   >
-                     {" "}
-                     Login here
-                  </span>
-               </p>
-            ) : (
-               <p className="mt-4 text-gray-600 text-base font-medium">
-                  Create an account?
-                  <span
-                     onClick={() => {
-                        setState("SignUp");
-                     }}
-                     className="text-red-500 font-semibold cursor-pointer"
-                  >
-                     {" "}
-                     Click here
-                  </span>
-               </p>
-            )}
+                     {state === "Signup" ? "Login" : "Signup"}
+                  </Button>
+               </div>
+            </div>
          </div>
-      </div>
+      </>
    );
-};
+}
 
 export default LoginSignup;

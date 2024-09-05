@@ -1,4 +1,3 @@
-//Latestaashis
 import React from "react";
 import { FaYoutube } from "react-icons/fa";
 
@@ -6,10 +5,10 @@ import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-export default function OurFooter() {
+export default function Footer() {
    return (
-      <div className="lg:px-10 xl:px-32 md:px-10 px-4  bg-gradient-to-t pt-7 bg-orange-600 font-poppins text-white">
-         <div className=" flex md:justify-between md:flex-row flex-col justify-evenly  md:items-center items-start  mt-4">
+      <div className="lg:px-10 xl:px-32 md:px-10 px-4  bg-gradient-to-t pt-7 bg-primarycolor font-poppins text-white">
+         <div className=" flex md:justify-between md:flex-row flex-col justify-eve1nly  md:items-center items-start  mt-4">
             <div className="flex md:hidden justify-between w-full">
                <div className=" md:w-[30%] w-[200px] md:hidden flex flex-col items-start ">
                   <div className="flex gap-3 items-center cursor-pointer">
@@ -44,7 +43,6 @@ export default function OurFooter() {
                   <div className=" flex flex-col lg:mt-0  space-y-4 pt-5 items-start  text-sm lg:text-base font-normal ">
                      <a href="/homepage">Home</a>
                      <a href="/about-us">About</a>
-                     <a href="/news">Blogs</a>
                      <a href="/">Help & Support</a>
                   </div>
                </div>
